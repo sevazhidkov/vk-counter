@@ -1,0 +1,13 @@
+{
+    "name": "sevazhidkov/vk-counter",
+    "type": "project",
+    "require": {
+        "predis/predis": "^1.1"
+    },
+    "authors": [
+        {
+            "name": "Seva Zhidkov",
+            "email": "iam@sevazhidkov.me"
+        }
+    ]
+}

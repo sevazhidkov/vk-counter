@@ -28,13 +28,13 @@ switch ($data->type) {
     $user_id = $data->object->user_id;
     //затем с помощью users.get получаем данные об авторе
     $user_info = json_decode(file_get_contents("https://api.vk.com/method/users.get?user_ids={$user_id}&v=5.0"));
-
+    $text = $data->body;
 //и извлекаем из ответа его имя
     $user_name = $user_info->response[0]->first_name;
 
 //С помощью messages.send и токена сообщества отправляем ответное сообщение
     $request_params = array(
-      'message' => "Hello, {$user_name}!",
+      'message' => $text,
       'user_id' => $user_id,
       'access_token' => $token,
       'v' => '5.0'
