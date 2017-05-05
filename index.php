@@ -1,5 +1,5 @@
 <?php
-require 'vendor/Predis/Autoloader.php';
+require 'Predis/Autoloader.php';
 
 if (!isset($_REQUEST)) {
   return;
