@@ -40,7 +40,7 @@ switch ($data->type) {
       while (!$checked) {
         $current_timestamp = $redis_client->lpop($text);
         // If message have been sent less than 24 hours ago, stop checking
-        if ($current_timestamp > $current_time - 60 * 60 * 24) {
+        if ($current_timestamp > $current_time - 60) {
           $checked = true;
           $redis_client->lpush($text, $current_timestamp);
         } else {
