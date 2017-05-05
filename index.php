@@ -33,7 +33,7 @@ switch ($data->type) {
 
     $message_frequency = intval($redis_client->llen($text));
     if ($message_frequency == 0) {
-      $result_len == 0;
+      $result_len = 0;
     } else {
       $checked = false; // Turn to true, when we'll pass all expired messages
       $expired = 0;
