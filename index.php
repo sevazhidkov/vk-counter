@@ -42,7 +42,8 @@ switch ($data->type) {
 
 $get_params = http_build_query($request_params);
 
-file_get_contents('https://api.vk.com/method/messages.send?'. $get_params);
+$result = file_get_contents('https://api.vk.com/method/messages.send?'. $get_params);
+file_put_contents('php://stderr', print_r($result, TRUE));
 
 echo('ok');
 
