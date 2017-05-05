@@ -1,6 +1,8 @@
 <?php
 require('vendor/autoload.php');
 
+use Predis\Collection\Iterator;
+
 if (!isset($_REQUEST)) {
   return;
 }
@@ -25,14 +27,35 @@ switch ($data->type) {
 
   // New incoming message
   case 'message_new':
+    $current_time = time();
     $user_id = $data->object->user_id;
     $text = $data->object->body;
 
-    $current_len = $redis_client->llen($text);
+    $message_frequency = intval($redis_client->llen($text));
+    if ($message_frequency == 0) {
+      $result_len == 0;
+    } else {
+      $checked = false; // Turn to true, when we'll pass all expired messages
+      $expired = 0;
+      while (!$checked) {
+        $current_timestamp = $redis_client->lpop($text);
+        // If message have been sent less than 24 hours ago, stop checking
+        if ($current_timestamp > $current_time - 60 * 60 * 24) {
+          $checked = true;
+          $redis_client->lpush($text, $current_timestamp);
+        } else {
+          $expired += 1;
+        }
+      }
+      $result_len = $message_frequency - $expired;
+    }
+
+    // Save current time for future use
+    $redis_client->rpush($text, $current_time);
 
     // Compose and send result message
     $request_params = array(
-      'message' => $current_len,
+      'message' => $result_len,
       'user_id' => $user_id,
       'access_token' => $token,
       'v' => '5.0'
