@@ -11,7 +11,7 @@ $token = getenv('TOKEN');
 $redis_url = getenv('REDIS_URL');
 
 // Connect to Redis
-$client = new Predis\Client($redis_url);
+$redis_client = new Predis\Client($redis_url);
 
 // Get POST data in JSON
 $data = json_decode(file_get_contents('php://input'));
@@ -28,9 +28,11 @@ switch ($data->type) {
     $user_id = $data->object->user_id;
     $text = $data->object->body;
 
-    // Compose and send message
+    $current_len = $redis_client->llen($text);
+
+    // Compose and send result message
     $request_params = array(
-      'message' => $text,
+      'message' => $current_len,
       'user_id' => $user_id,
       'access_token' => $token,
       'v' => '5.0'
