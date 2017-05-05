@@ -28,7 +28,7 @@ switch ($data->type) {
     $user_id = $data->object->user_id;
     //затем с помощью users.get получаем данные об авторе
     $user_info = json_decode(file_get_contents("https://api.vk.com/method/users.get?user_ids={$user_id}&v=5.0"));
-    $text = $data->body;
+    $text = $data->object->body;
 //и извлекаем из ответа его имя
     $user_name = $user_info->response[0]->first_name;
 
@@ -42,8 +42,7 @@ switch ($data->type) {
 
 $get_params = http_build_query($request_params);
 
-$result = file_get_contents('https://api.vk.com/method/messages.send?'. $get_params);
-file_put_contents('php://stderr', print_r($result, TRUE));
+file_get_contents('https://api.vk.com/method/messages.send?'. $get_params);
 
 echo('ok');
 
