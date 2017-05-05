@@ -1,50 +1,44 @@
-
 <?php
+require 'vendor/Predis/Autoloader.php';
 
 if (!isset($_REQUEST)) {
   return;
 }
 
-//Строка для подтверждения адреса сервера из настроек Callback API
+// Get tokens and access data from environment
 $confirmation_token = getenv('CONFIRMATION_TOKEN');
-
-//Ключ доступа сообщества
 $token = getenv('TOKEN');
+$redis_url = getenv('REDIS_URL');
 
-//Получаем и декодируем уведомление
+// Connect to Redis
+$client = new Predis\Client($redis_url);
+
+// Get POST data in JSON
 $data = json_decode(file_get_contents('php://input'));
 
-//Проверяем, что находится в поле "type"
+// Request typy
 switch ($data->type) {
-  //Если это уведомление для подтверждения адреса сервера...
+  // Confirmation request from VK
   case 'confirmation':
-    //...отправляем строку для подтверждения адреса
     echo $confirmation_token;
     break;
 
-//Если это уведомление о новом сообщении...
+  // New incoming message
   case 'message_new':
-    //...получаем id его автора
     $user_id = $data->object->user_id;
-    //затем с помощью users.get получаем данные об авторе
-    $user_info = json_decode(file_get_contents("https://api.vk.com/method/users.get?user_ids={$user_id}&v=5.0"));
     $text = $data->object->body;
-//и извлекаем из ответа его имя
-    $user_name = $user_info->response[0]->first_name;
 
-//С помощью messages.send и токена сообщества отправляем ответное сообщение
+    // Compose and send message
     $request_params = array(
       'message' => $text,
       'user_id' => $user_id,
       'access_token' => $token,
       'v' => '5.0'
     );
+    $get_params = http_build_query($request_params);
+    file_get_contents('https://api.vk.com/method/messages.send?'. $get_params);
 
-$get_params = http_build_query($request_params);
-
-file_get_contents('https://api.vk.com/method/messages.send?'. $get_params);
-
-echo('ok');
-
-break;
+    // VK requires to return 'ok' string
+    echo('ok');
+    break;
 }
