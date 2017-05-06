@@ -13,7 +13,7 @@ $key = $argv[1];
 $amount = intval($argv[2]);
 
 $current_time = time();
-$expired_time = $current_time - (60 * 60 * 24 + 1)
+$expired_time = $current_time - (60 * 60 * 24 + 1);
 for ($i = 0; $i < $amount; $i++) {
   $redis_client->rpush($key, $expired_time);
 }
