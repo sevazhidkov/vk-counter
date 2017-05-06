@@ -1,5 +1,5 @@
 <?php
-require('../vendor/autoload.php');
+require('vendor/autoload.php');
 
 $redis_url = getenv('REDIS_URL');
 $redis_client = new Predis\Client($redis_url);
