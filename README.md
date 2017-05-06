@@ -54,7 +54,8 @@ if ($message_frequency == 0) {
 }
 
 // Save current time for future use
-$redis_client->rpush($text, $current_time);```
+$redis_client->rpush($text, $current_time);
+```
 
 ## Оценка эффективности
 
