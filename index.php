@@ -1,8 +1,6 @@
 <?php
 require('vendor/autoload.php');
 
-use Predis\Collection\Iterator;
-
 if (!isset($_REQUEST)) {
   return;
 }
