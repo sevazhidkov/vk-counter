@@ -5,7 +5,7 @@ if (!isset($_REQUEST)) {
   return;
 }
 
-$CACHE_INTERVAL = 24 * 60 * 60 // in seconds
+$CACHE_INTERVAL = 24 * 60 * 60; // in seconds
 
 // Get tokens and access data from environment
 $confirmation_token = getenv('CONFIRMATION_TOKEN');
