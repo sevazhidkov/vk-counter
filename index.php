@@ -7,6 +7,8 @@ if (!isset($_REQUEST)) {
   return;
 }
 
+$CACHE_INTERVAL = 24 * 60 * 60 // in seconds
+
 // Get tokens and access data from environment
 $confirmation_token = getenv('CONFIRMATION_TOKEN');
 $token = getenv('TOKEN');
@@ -44,7 +46,7 @@ switch ($data->type) {
           break;
         }
         // If message have been sent less than 24 hours ago, stop checking
-        if ($current_timestamp > $current_time - 60 * 60 * 24) {
+        if ($current_timestamp > $current_time - $CACHE_INTERVAL) {
           $checked = true;
           $redis_client->lpush($text, $current_timestamp);
         } else {
