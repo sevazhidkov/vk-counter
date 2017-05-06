@@ -3,7 +3,8 @@
 
 ## Используемые технологии
 
-Тестировался на PHP 7.0, не должно возникнуть проблем на других версиях
+Тестировался на PHP 7.0, не должно возникнуть проблем на других версиях;
+зависимости через Composer
 
 Redis и коннектор Predis (использует ООП, возможно переписать на голый TCP/использование функциональной библиотеки)
 
@@ -27,6 +28,33 @@ Redis и коннектор Predis (использует ООП, возможн�
 где l1 - длина изначального списка, l2 - количество элементов, которые мы удалили
 и не вернули с помощью LPUSH
 4) Добавляем новый timestamp в список для данного текста с помощью операции LPUSH
+
+```php
+$message_frequency = intval($redis_client->llen($text));
+if ($message_frequency == 0) {
+  $result_len = 0;
+} else {
+  $checked = false; // Turn to true, when we'll pass all expired messages
+  $expired = 0;
+  while (!$checked) {
+    $current_timestamp = $redis_client->lpop($text);
+    // If there's no timestamps left, we should stop and return 0
+    if (is_null($current_timestamp)) {
+      break;
+    }
+    // If message have been sent less than 24 hours ago, stop checking
+    if ($current_timestamp > $current_time - 60 * 60 * 24) {
+      $checked = true;
+      $redis_client->lpush($text, $current_timestamp);
+    } else {
+      $expired += 1;
+    }
+  }
+  $result_len = $message_frequency - $expired;
+}
+
+// Save current time for future use
+$redis_client->rpush($text, $current_time);```
 
 ## Оценка эффективности
 

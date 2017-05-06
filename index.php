@@ -39,6 +39,7 @@ switch ($data->type) {
       $expired = 0;
       while (!$checked) {
         $current_timestamp = $redis_client->lpop($text);
+        // If there's no timestamps left, we should stop and return 0
         if (is_null($current_timestamp)) {
           break;
         }
