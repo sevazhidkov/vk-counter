@@ -13,6 +13,6 @@ $key = $argv[1];
 $amount = intval($argv[2]);
 
 $current_time = time();
-for ($i = 0; $i < amount; $i++) {
+for ($i = 0; $i < $amount; $i++) {
   $redis_client->rpush($key, $current_time);
 }
