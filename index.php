@@ -57,6 +57,12 @@ switch ($data->type) {
     // Save current time for future use
     $redis_client->rpush($text, $current_time);
 
+    // For stress testing
+    if ($user_id == -1) {
+      echo('ok');
+      break;
+    }
+
     // Compose and send result message
     $request_params = array(
       'message' => $result_len,

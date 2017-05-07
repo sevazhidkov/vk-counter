@@ -9,5 +9,5 @@ $redis_client = new Predis\Client($redis_url);
 $delete_pattern = '*';
 
 foreach (new Iterator\Keyspace($redis_client, $delete_pattern) as $key) {
-  $redis_client.del($key);
+  $redis_client->del($key);
 }
