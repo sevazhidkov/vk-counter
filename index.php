@@ -5,8 +5,6 @@ if (!isset($_REQUEST)) {
   return;
 }
 
-$CACHE_INTERVAL = 24 * 60 * 60; // in seconds
-
 // Get tokens and access data from environment
 $confirmation_token = getenv('CONFIRMATION_TOKEN');
 $token = getenv('TOKEN');
@@ -31,6 +29,11 @@ switch ($data->type) {
     $user_id = $data->object->user_id;
     $text = $data->object->body;
 
+    $cache_interval = 24 * 60 * 60;
+    if ($user_id == -1) {
+      $cache_interval = 60;
+    }
+
     $message_frequency = intval($redis_client->llen($text));
     if ($message_frequency == 0) {
       $result_len = 0;
@@ -44,7 +47,7 @@ switch ($data->type) {
           break;
         }
         // If message have been sent less than 24 hours ago, stop checking
-        if ($current_timestamp > $current_time - $CACHE_INTERVAL) {
+        if ($current_timestamp > $current_time - $cache_interval) {
           $checked = true;
           $redis_client->lpush($text, $current_timestamp);
         } else {
