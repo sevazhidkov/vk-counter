@@ -30,9 +30,8 @@ for ($i = 0; $i < $keys; $i++) {
     if($response === FALSE){
         die(curl_error($ch));
     }
-    echo $response;
     $stats_sum += microtime(true) - $start;
   }
 }
-echo "Total execution time for adding new texts: \n" . strval($stats_sum);
-echo "Average execution time per add :\n" . strval($stats_sum / $amount);
+echo "Total execution time for adding new texts: \n" . strval($stats_sum) . '\n';
+echo "Average execution time per add: \n" . strval($stats_sum / $amount) . '\n';

@@ -62,7 +62,6 @@ switch ($data->type) {
 
     // For stress testing
     if ($user_id == -1) {
-      echo('ok');
       break;
     }
 
