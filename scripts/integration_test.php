@@ -20,13 +20,16 @@ for ($i = 0; $i < $keys; $i++) {
           'body' => $key
         ),
     );
-    $ch = curl_init('https://www.googleapis.com/blogger/v3/blogs/'.$blogID.'/posts/');
+    $ch = curl_init('https://vk-counter.herokuapp.com/');
     curl_setopt_array($ch, array(
         CURLOPT_POST => TRUE,
         CURLOPT_RETURNTRANSFER => TRUE,
         CURLOPT_POSTFIELDS => json_encode($postData)
     ));
-
+    $response = curl_exec($ch);
+    if($response === FALSE){
+        die(curl_error($ch));
+    }
     $stats_sum += microtime(true) - $start;
   }
 }
