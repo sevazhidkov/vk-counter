@@ -30,5 +30,5 @@ for ($i = 0; $i < $keys; $i++) {
     $stats_sum += microtime(true) - $start;
   }
 }
-echo "Total execution time for adding new texts: \n" . strval($stats_sum)
+echo "Total execution time for adding new texts: \n" . strval($stats_sum);
 echo "Average execution time per add :\n" . strval($stats_sum / $amount);
