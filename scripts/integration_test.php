@@ -30,6 +30,7 @@ for ($i = 0; $i < $keys; $i++) {
     if($response === FALSE){
         die(curl_error($ch));
     }
+    echo $response;
     $stats_sum += microtime(true) - $start;
   }
 }
