@@ -20,5 +20,5 @@ for ($i = 0; $i < $keys; $i++) {
   $stats_sum += microtime(true) - $start;
 }
 
-echo "Total execution time: \n" . strval(time() - $current_time);
+echo "Total execution time: \n" . strval(time() - $current_time) . "\n";
 echo "Average execution time per RPUSH: \n" . strval($stats_sum / $keys);
