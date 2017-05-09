@@ -20,7 +20,7 @@ for ($i = 0; $i < $keys; $i++) {
           'body' => $key
         ),
     );
-    $ch = curl_init('http://localhost:' . strval(getenv('PORT')));
+    $ch = curl_init('https://vk-counter.herokuapp.com/');
     curl_setopt_array($ch, array(
         CURLOPT_POST => TRUE,
         CURLOPT_RETURNTRANSFER => TRUE,

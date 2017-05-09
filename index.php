@@ -32,6 +32,7 @@ switch ($data->type) {
     $cache_interval = 24 * 60 * 60;
     // For stress-testing
     if ($user_id == -1) {
+      // For 60 seconds 
       $cache_interval = 60;
     }
 
