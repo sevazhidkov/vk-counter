@@ -15,7 +15,7 @@ $stats_sum = 0.0; // Store sum of times of execution for each push.
 $current_time = time();
 for ($i = 0; $i < $keys; $i++) {
   $start = microtime(true);
-  $key = 'key' . $i
+  $key = 'key' . $i;
   $redis_client->rpush($key, $current_time);
   $stats_sum += microtime(true) - $start;
 }
