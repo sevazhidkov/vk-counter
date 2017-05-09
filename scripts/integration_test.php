@@ -34,4 +34,4 @@ for ($i = 0; $i < $keys; $i++) {
   }
 }
 echo "Total execution time for adding new texts: \n" . strval($stats_sum) . "\n";
-echo "Average execution time per add: \n" . strval($stats_sum / $amount) . "\n";
+echo "Average execution time per add: \n" . strval($stats_sum / ($keys * $amount)) . "\n";
