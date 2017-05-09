@@ -9,7 +9,7 @@ if ($argc !== 2) {
     exit(1);
 }
 
-$keys = $argv[1];
+$keys = intval($argv[1]);
 $stats_sum = 0.0; // Store sum of times of execution for each push.
 
 $current_time = time();
