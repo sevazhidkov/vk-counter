@@ -29,6 +29,19 @@ switch ($data->type) {
     $user_id = $data->object->user_id;
     $text = $data->object->body;
 
+    if (is_null($text) or $text == '') {
+      $request_params = array(
+        'message' => 'Я понимаю только текстовые сообщения :)',
+        'user_id' => $user_id,
+        'access_token' => $token,
+        'v' => '5.0'
+      );
+      $get_params = http_build_query($request_params);
+      file_get_contents('https://api.vk.com/method/messages.send?'. $get_params);
+      echo('ok');
+      break;
+    }
+
     $cache_interval = 24 * 60 * 60;
     // For stress-testing
     if ($user_id == -2) {
