@@ -31,8 +31,7 @@ switch ($data->type) {
 
     $cache_interval = 24 * 60 * 60;
     // For stress-testing
-    if ($user_id == -1) {
-      // For 60 seconds 
+    if ($user_id == -2) {
       $cache_interval = 60;
     }
 
@@ -62,8 +61,8 @@ switch ($data->type) {
     // Save current time for future use
     $redis_client->rpush($text, $current_time);
 
-    // For stress testing
-    if ($user_id == -1) {
+    // For stress testing we shouldn't send message to vk servers
+    if ($user_id == -1 or $user_id == -2) {
       break;
     }
 
