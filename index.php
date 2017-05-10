@@ -30,11 +30,6 @@ switch ($data->type) {
 
   // New incoming message
   case 'message_new':
-    if ($data->secret != $secret_key) {
-      echo "bad secret token";
-      break;
-    }
-
     $current_time = time();
     $user_id = $data->object->user_id;
     $text = $data->object->body;
