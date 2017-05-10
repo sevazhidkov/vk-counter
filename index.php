@@ -1,6 +1,9 @@
 <?php
 require('vendor/autoload.php');
 
+$MESSAGE_COUNT_LIMIT = 5000;
+$USER_REQUESTS_PER_HOUR = 120;
+
 if (!isset($_REQUEST)) {
   return;
 }
@@ -29,6 +32,15 @@ switch ($data->type) {
     $user_id = $data->object->user_id;
     $text = $data->object->body;
 
+    $user_count = $redis_client->incr(strval($user_id));
+    if $user_count > $USER_REQUESTS_PER_HOUR and $user_id != -1 and $user_id != -2 {
+      echo('ok');
+      break;
+    } elseif $user_count == 1 {
+      // If it's the first user message in last hour, set a timeout for Redis key
+      $redis_client->expire(strval($user_id), $current_time + 60*60);
+    }
+
     if (is_null($text) or $text == '') {
       $request_params = array(
         'message' => 'Я понимаю только текстовые сообщения :)',
@@ -42,6 +54,8 @@ switch ($data->type) {
       break;
     }
 
+    $text = 'message#' . $text;
+
     $cache_interval = 24 * 60 * 60;
     // For stress-testing
     if ($user_id == -2) {
@@ -51,6 +65,9 @@ switch ($data->type) {
     $message_frequency = intval($redis_client->llen($text));
     if ($message_frequency == 0) {
       $result_len = 0;
+    } elseif $message_frequency > $MESSAGE_COUNT_LIMIT { // Flood detection
+      echo 'ok';
+      break;
     } else {
       $checked = false; // Turn to true, when we'll pass all expired messages
       $expired = 0;
