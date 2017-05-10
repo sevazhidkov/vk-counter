@@ -34,7 +34,7 @@ switch ($data->type) {
     $user_id = $data->object->user_id;
     $text = $data->object->body;
 
-    if (mb_strlen($text) > $MESSAGE_LENGTH_LIMIT) {
+    if (strlen($text) > $MESSAGE_LENGTH_LIMIT) {
       echo('ok');
       break;
     }
