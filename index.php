@@ -2,6 +2,7 @@
 require('vendor/autoload.php');
 
 $MESSAGE_COUNT_LIMIT = 5000;
+$MESSAGE_LENGTH_LIMIT = 1000;
 $USER_REQUESTS_PER_HOUR = 120;
 
 if (!isset($_REQUEST)) {
@@ -10,6 +11,7 @@ if (!isset($_REQUEST)) {
 
 // Get tokens and access data from environment
 $confirmation_token = getenv('CONFIRMATION_TOKEN');
+$secret_key = getenv('SECRET_KEY');
 $token = getenv('TOKEN');
 $redis_url = getenv('REDIS_URL');
 
@@ -28,9 +30,19 @@ switch ($data->type) {
 
   // New incoming message
   case 'message_new':
+    if ($data->secret != $secret_key) {
+      echo "bad secret token";
+      break;
+    }
+
     $current_time = time();
     $user_id = $data->object->user_id;
     $text = $data->object->body;
+
+    if (mb_strlen($text) > $MESSAGE_LENGTH_LIMIT) {
+      echo('ok');
+      break;
+    }
 
     $user_count = $redis_client->incr(strval($user_id));
     if ($user_count > $USER_REQUESTS_PER_HOUR and $user_id != -1 and $user_id != -2) {
